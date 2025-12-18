@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Jeopardy (Images)</title>
+  <style>
+    :root{
+      --bg:#0b1a6e;
+      --cell:#1c2fb3;
+      --cellHover:#2b44ff;
+      --used:#0b0b0b;
+      --gold:#ffd54a;
+      --white:#ffffff;
+      --border:#000000;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--white);
+    }
+    header{
+      padding:16px 12px 6px;
+      text-align:center;
+    }
+    header h1{
+      margin:0;
+      letter-spacing:1px;
+      font-weight:800;
+    }
+
+    /* Scoreboard */
+    .scoreboard{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      padding:10px 12px 14px;
+    }
+    .team{
+      background:#ffffff;
+      color:#000;
+      border:2px solid #000;
+      border-radius:8px;
+      padding:10px 12px;
+      min-width:260px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      gap:10px 12px;
+      align-items:center;
+    }
+    .team input{
+      width:100%;
+      padding:8px 10px;
+      font-size:16px;
+      border:1px solid #999;
+      border-radius:6px;
+    }
+    .points{
+      font-weight:900;
+      font-size:22px;
+      padding:6px 10px;
+      background:var(--bg);
+      color:var(--white);
+      border-radius:6px;
+      text-align:center;
+      min-width:90px;
+    }
+    .team-controls{
+      grid-column: 1 / -1;
+      display:flex;
+      gap:8px;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .btn{
+      cursor:pointer;
+      border:2px solid #000;
+      background:var(--gold);
+      color:#000;
+      font-weight:800;
+      padding:8px 10px;
+      border-radius:8px;
+      min-width:120px;
+    }
+    .btn.secondary{
+      background:#eee;
+      font-weight:700;
+    }
+
+    /* Board */
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 10px 18px;
+    }
+    .board{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:10px;
+      padding:10px;
+      background:rgba(0,0,0,.25);
+      border:3px solid var(--border);
+      border-radius:10px;
+    }
+    .category{
+      background:#141a4e;
+      border:3px solid var(--border);
+      border-radius:8px;
+      padding:14px 10px;
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:.5px;
+      text-align:center;
+      font-size:16px;
+      color:var(--white);
+    }
+    .cell{
+      background:var(--cell);
+      border:3px solid var(--border);
+      border-radius:8px;
+      height:110px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:34px;
+      color:var(--gold);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .05s ease, background .15s ease;
+    }
+    .cell:hover{ background:var(--cellHover); transform: translateY(-1px); }
+    .cell.used{
+      background:var(--used);
+      color:#555;
+      cursor:not-allowed;
+      transform:none;
+    }
+
+    /* Modal */
+    .modal-backdrop{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.85);
+      z-index:999;
+      padding:20px;
+    }
+    .modal{
+      max-width:980px;
+      margin:0 auto;
+      background:var(--bg);
+      border:4px solid var(--gold);
+      border-radius:12px;
+      overflow:hidden;
+    }
+    .modal-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:10px 12px;
+      background:#141a4e;
+      border-bottom:3px solid rgba(255,255,255,.2);
+    }
+    .modal-title{
+      font-weight:900;
+      letter-spacing:.4px;
+      margin:0;
+      font-size:18px;
+    }
+    .close{
+      cursor:pointer;
+      background:var(--gold);
+      border:2px solid #000;
+      border-radius:10px;
+      padding:8px 10px;
+      font-weight:900;
+    }
+    .modal-body{
+      padding:14px;
+      display:grid;
+      gap:12px;
+    }
+    .prompt{
+      font-size:22px;
+      font-weight:800;
+      text-align:center;
+      margin:0;
+    }
+    .qimg{
+      width:100%;
+      max-height:520px;
+      object-fit:contain;
+      background:#0a0f3f;
+      border:3px solid rgba(255,255,255,.15);
+      border-radius:10px;
+    }
+    .answer{
+      display:none;
+      background:#ffffff;
+      color:#000;
+      border-radius:10px;
+      padding:12px 14px;
+      border:3px solid #000;
+      font-size:22px;
+      font-weight:900;
+      text-align:center;
+    }
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      padding:0 14px 14px;
+    }
+
+    /* Small screens */
+    @media (max-width:720px){
+      .cell{ height:92px; font-size:28px; }
+      .team{ min-width: 92%; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>JEOPARDY</h1>
+  </header>
+
+  <section class="scoreboard" aria-label="Scoreboard">
+    <div class="team" data-team="0">
+      <input value="Team 1" aria-label="Team 1 name" />
+      <div class="points" data-points="0">0</div>
+      <div class="team-controls">
+        <button class="btn" data-action="add">+ Add last value</button>
+        <button class="btn" data-action="sub">− Subtract last value</button>
+        <button class="btn secondary" data-action="set">Set score…</button>
+      </div>
+    </div>
+
+    <div class="team" data-team="1">
+      <input value="Team 2" aria-label="Team 2 name" />
+      <div class="points" data-points="0">0</div>
+      <div class="team-controls">
+        <button class="btn" data-action="add">+ Add last value</button>
+        <button class="btn" data-action="sub">− Subtract last value</button>
+        <button class="btn secondary" data-action="set">Set score…</button>
+      </div>
+    </div>
+
+    <button class="btn secondary" id="resetGame" style="min-width:220px;">Reset board + scores</button>
+  </section>
+
+  <div class="wrap">
+    <div class="board" id="board" role="table" aria-label="Jeopardy board">
+      <!-- categories + cells are injected by JS -->
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" id="backdrop" role="dialog" aria-modal="true" aria-label="Question modal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <p class="modal-title" id="modalTitle">Category for 0</p>
+        </div>
+        <button class="close" id="closeModal">Close</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="prompt" id="modalPrompt"></p>
+        <img class="qimg" id="modalImg" alt="Question image" />
+        <div class="answer" id="modalAnswer"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="revealAnswer">Reveal Answer</button>
+        <button class="btn secondary" id="markUsedClose">Mark used & close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /*
+      EDIT THIS DATA ONLY.
+      Put your images in: /images/1.png ... /images/15.png
+      Or replace image with a full URL (https://...) or another path.
+    */
+    const gameData = {
+      categories: ["Category 1", "Category 2", "Category 3"],
+      // 3 columns x 5 rows = 15 clues
+      // index: [row][col]
+      clues: [
+        // Row 1 = 100
+        [
+          { value: 100, prompt: "Look at the image.", image: "images/1.png",  answer: "ANSWER 1" },
+          { value: 100, prompt: "Look at the image.", image: "images/2.png",  answer: "ANSWER 2" },
+          { value: 100, prompt: "Look at the image.", image: "images/3.png",  answer: "ANSWER 3" }
+        ],
+        // Row 2 = 200
+        [
+          { value: 200, prompt: "Look at the image.", image: "images/4.png",  answer: "ANSWER 4" },
+          { value: 200, prompt: "Look at the image.", image: "images/5.png",  answer: "ANSWER 5" },
+          { value: 200, prompt: "Look at the image.", image: "images/6.png",  answer: "ANSWER 6" }
+        ],
+        // Row 3 = 300
+        [
+          { value: 300, prompt: "Look at the image.", image: "images/7.png",  answer: "ANSWER 7" },
+          { value: 300, prompt: "Look at the image.", image: "images/8.png",  answer: "ANSWER 8" },
+          { value: 300, prompt: "Look at the image.", image: "images/9.png",  answer: "ANSWER 9" }
+        ],
+        // Row 4 = 400
+        [
+          { value: 400, prompt: "Look at the image.", image: "images/10.png", answer: "ANSWER 10" },
+          { value: 400, prompt: "Look at the image.", image: "images/11.png", answer: "ANSWER 11" },
+          { value: 400, prompt: "Look at the image.", image: "images/12.png", answer: "ANSWER 12" }
+        ],
+        // Row 5 = 500
+        [
+          { value: 500, prompt: "Look at the image.", image: "images/13.png", answer: "ANSWER 13" },
+          { value: 500, prompt: "Look at the image.", image: "images/14.png", answer: "ANSWER 14" },
+          { value: 500, prompt: "Look at the image.", image: "images/15.png", answer: "ANSWER 15" }
+        ]
+      ]
+    };
+
+    // ---- App state ----
+    const state = {
+      lastValue: 0,
+      activeCellEl: null,
+      activeClue: null
+    };
+
+    const boardEl = document.getElementById("board");
+    const backdropEl = document.getElementById("backdrop");
+    const modalTitleEl = document.getElementById("modalTitle");
+    const modalPromptEl = document.getElementById("modalPrompt");
+    const modalImgEl = document.getElementById("modalImg");
+    const modalAnswerEl = document.getElementById("modalAnswer");
+
+    function buildBoard() {
+      boardEl.innerHTML = "";
+
+      // categories row (3)
+      for (let c = 0; c < gameData.categories.length; c++) {
+        const cat = document.createElement("div");
+        cat.className = "category";
+        cat.textContent = gameData.categories[c];
+        boardEl.appendChild(cat);
+      }
+
+      // 5 rows x 3 cols cells
+      for (let r = 0; r < gameData.clues.length; r++) {
+        for (let c = 0; c < gameData.clues[r].length; c++) {
+          const clue = gameData.clues[r][c];
+
+          const cell = document.createElement("div");
+          cell.className = "cell";
+          cell.setAttribute("role", "cell");
+          cell.tabIndex = 0;
+          cell.dataset.row = String(r);
+          cell.dataset.col = String(c);
+          cell.dataset.used = "0";
+          cell.textContent = clue.value;
+
+          cell.addEventListener("click", () => openClue(cell, r, c));
+          cell.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openClue(cell, r, c);
+            }
+          });
+
+          boardEl.appendChild(cell);
+        }
+      }
+    }
+
+    function openClue(cellEl, r, c) {
+      if (cellEl.classList.contains("used")) return;
+
+      const clue = gameData.clues[r][c];
+      state.lastValue = clue.value;
+      state.activeCellEl = cellEl;
+      state.activeClue = clue;
+
+      modalTitleEl.textContent = `${gameData.categories[c]} for ${clue.value}`;
+      modalPromptEl.textContent = clue.prompt || "";
+      modalImgEl.src = clue.image || "";
+      modalAnswerEl.textContent = clue.answer || "";
+      modalAnswerEl.style.display = "none";
+
+      backdropEl.style.display = "block";
+    }
+
+    function closeModal() {
+      backdropEl.style.display = "none";
+      state.activeCellEl?.focus?.();
+    }
+
+    function markUsed() {
+      if (!state.activeCellEl) return;
+      state.activeCellEl.classList.add("used");
+      state.activeCellEl.dataset.used = "1";
+    }
+
+    // Modal controls
+    document.getElementById("closeModal").addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeModal();
+    });
+
+    document.getElementById("revealAnswer").addEventListener("click", (e) => {
+      e.stopPropagation();
+      modalAnswerEl.style.display = "block";
+    });
+
+    document.getElementById("markUsedClose").addEventListener("click", (e) => {
+      e.stopPropagation();
+      markUsed();
+      closeModal();
+    });
+
+    // Click outside modal closes
+    backdropEl.addEventListener("click", () => closeModal());
+    document.querySelector(".modal").addEventListener("click", (e) => e.stopPropagation());
+
+    // ESC closes modal
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && backdropEl.style.display === "block") closeModal();
+    });
+
+    // Scoreboard controls
+    function getTeamPointsEl(teamEl){ return teamEl.querySelector(".points"); }
+
+    function setPoints(teamEl, value){
+      const pEl = getTeamPointsEl(teamEl);
+      pEl.dataset.points = String(value);
+      pEl.textContent = String(value);
+    }
+
+    function getPoints(teamEl){
+      const pEl = getTeamPointsEl(teamEl);
+      const n = parseInt(pEl.dataset.points || "0", 10);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    document.querySelectorAll(".team").forEach(teamEl => {
+      teamEl.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const action = btn.dataset.action;
+          const current = getPoints(teamEl);
+
+          if (action === "add") {
+            setPoints(teamEl, current + state.lastValue);
+            markUsed(); // optional: mark used when awarding points
+          } else if (action === "sub") {
+            setPoints(teamEl, current - state.lastValue);
+            markUsed(); // optional
+          } else if (action === "set") {
+            const input = prompt("Enter new score (number):", String(current));
+            const n = parseInt(input ?? "", 10);
+            if (Number.isFinite(n)) setPoints(teamEl, n);
+          }
+        });
+      });
+    });
+
+    // Reset
+    document.getElementById("resetGame").addEventListener("click", () => {
+      if (!confirm("Reset board and scores?")) return;
+
+      document.querySelectorAll(".cell").forEach(cell => {
+        cell.classList.remove("used");
+        cell.dataset.used = "0";
+      });
+
+      document.querySelectorAll(".team").forEach(teamEl => setPoints(teamEl, 0));
+      state.lastValue = 0;
+      closeModal();
+    });
+
+    // Init
+    buildBoard();
+  </script>
+</body>
+</html>
