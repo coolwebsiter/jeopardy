@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jeopardy (Images)</title>
+  <title>Jeopardy (Images + Text 500)</title>
   <style>
     :root{
       --bg:#0b1a6e;
@@ -13,6 +13,7 @@
       --gold:#ffd54a;
       --white:#ffffff;
       --border:#000000;
+      --panel:#141a4e;
     }
     *{box-sizing:border-box}
     body{
@@ -22,112 +23,153 @@
       color:var(--white);
     }
     header{
-      padding:16px 12px 6px;
+      padding:14px 10px 8px;
       text-align:center;
     }
     header h1{
       margin:0;
       letter-spacing:1px;
-      font-weight:800;
+      font-weight:900;
+      font-size:26px;
     }
 
-    /* Scoreboard */
-    .scoreboard{
+    /* Compact control bar + teams */
+    .topbar{
+      max-width:1200px;
+      margin:0 auto;
+      padding:8px 10px 12px;
+    }
+    .controls{
       display:flex;
       gap:10px;
       justify-content:center;
-      flex-wrap:wrap;
-      padding:10px 12px 14px;
-    }
-    .team{
-      background:#ffffff;
-      color:#000;
-      border:2px solid #000;
-      border-radius:8px;
-      padding:10px 12px;
-      min-width:260px;
-      display:grid;
-      grid-template-columns: 1fr auto;
-      grid-template-rows: auto auto;
-      gap:10px 12px;
       align-items:center;
-    }
-    .team input{
-      width:100%;
-      padding:8px 10px;
-      font-size:16px;
-      border:1px solid #999;
-      border-radius:6px;
-    }
-    .points{
-      font-weight:900;
-      font-size:22px;
-      padding:6px 10px;
-      background:var(--bg);
-      color:var(--white);
-      border-radius:6px;
-      text-align:center;
-      min-width:90px;
-    }
-    .team-controls{
-      grid-column: 1 / -1;
-      display:flex;
-      gap:8px;
-      justify-content:space-between;
       flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    label{font-weight:800}
+    select{
+      padding:8px 10px;
+      border-radius:8px;
+      border:2px solid #000;
+      font-weight:800;
     }
     .btn{
       cursor:pointer;
       border:2px solid #000;
       background:var(--gold);
       color:#000;
-      font-weight:800;
+      font-weight:900;
       padding:8px 10px;
-      border-radius:8px;
-      min-width:120px;
+      border-radius:10px;
     }
     .btn.secondary{
       background:#eee;
+      font-weight:800;
+    }
+    .hint{
+      font-size:14px;
+      opacity:.9;
+      text-align:center;
+      margin:6px 0 0;
+    }
+
+    .teams{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(180px, 1fr));
+      gap:8px;
+    }
+    .team{
+      background:#fff;
+      color:#000;
+      border:2px solid #000;
+      border-radius:10px;
+      padding:8px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:6px 8px;
+      align-items:center;
+    }
+    .team input{
+      width:100%;
+      padding:6px 8px;
+      font-size:14px;
+      border:1px solid #999;
+      border-radius:8px;
       font-weight:700;
+    }
+    .points{
+      font-weight:900;
+      font-size:16px;
+      padding:6px 8px;
+      background:var(--bg);
+      color:var(--white);
+      border-radius:8px;
+      text-align:center;
+      min-width:62px;
+    }
+    .team-controls{
+      grid-column: 1 / -1;
+      display:flex;
+      gap:6px;
+      justify-content:space-between;
+    }
+    .mini{
+      cursor:pointer;
+      border:2px solid #000;
+      border-radius:10px;
+      padding:6px 8px;
+      font-weight:900;
+      background:var(--gold);
+      color:#000;
+      flex:1;
+    }
+    .mini.secondary{
+      background:#eee;
+      font-weight:800;
     }
 
     /* Board */
     .wrap{
-      max-width:1100px;
+      max-width:1200px;
       margin:0 auto;
       padding:0 10px 18px;
     }
     .board{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap:10px;
       padding:10px;
       background:rgba(0,0,0,.25);
       border:3px solid var(--border);
-      border-radius:10px;
+      border-radius:12px;
     }
     .category{
-      background:#141a4e;
+      background:var(--panel);
       border:3px solid var(--border);
-      border-radius:8px;
-      padding:14px 10px;
+      border-radius:10px;
+      padding:12px 8px;
       text-transform:uppercase;
       font-weight:900;
-      letter-spacing:.5px;
+      letter-spacing:.6px;
       text-align:center;
-      font-size:16px;
+      font-size:14px;
       color:var(--white);
+      min-height:52px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
     .cell{
       background:var(--cell);
       border:3px solid var(--border);
-      border-radius:8px;
-      height:110px;
+      border-radius:10px;
+      height:96px;
       display:flex;
       align-items:center;
       justify-content:center;
       font-weight:900;
-      font-size:34px;
+      font-size:30px;
       color:var(--gold);
       cursor:pointer;
       user-select:none;
@@ -148,7 +190,7 @@
       inset:0;
       background:rgba(0,0,0,.85);
       z-index:999;
-      padding:20px;
+      padding:18px;
     }
     .modal{
       max-width:980px;
@@ -164,14 +206,14 @@
       justify-content:space-between;
       gap:10px;
       padding:10px 12px;
-      background:#141a4e;
+      background:var(--panel);
       border-bottom:3px solid rgba(255,255,255,.2);
     }
     .modal-title{
       font-weight:900;
       letter-spacing:.4px;
       margin:0;
-      font-size:18px;
+      font-size:16px;
     }
     .close{
       cursor:pointer;
@@ -184,13 +226,14 @@
     .modal-body{
       padding:14px;
       display:grid;
-      gap:12px;
+      gap:10px;
     }
     .prompt{
       font-size:22px;
-      font-weight:800;
+      font-weight:900;
       text-align:center;
       margin:0;
+      line-height:1.2;
     }
     .qimg{
       width:100%;
@@ -199,6 +242,7 @@
       background:#0a0f3f;
       border:3px solid rgba(255,255,255,.15);
       border-radius:10px;
+      display:none; /* only shown if clue has image */
     }
     .answer{
       display:none;
@@ -219,10 +263,12 @@
       padding:0 14px 14px;
     }
 
-    /* Small screens */
-    @media (max-width:720px){
-      .cell{ height:92px; font-size:28px; }
-      .team{ min-width: 92%; }
+    @media (max-width:1100px){
+      .teams{ grid-template-columns: repeat(4, minmax(170px, 1fr)); }
+    }
+    @media (max-width:860px){
+      .teams{ grid-template-columns: repeat(2, minmax(170px, 1fr)); }
+      .cell{ height:88px; font-size:26px; }
     }
   </style>
 </head>
@@ -232,43 +278,42 @@
     <h1>JEOPARDY</h1>
   </header>
 
-  <section class="scoreboard" aria-label="Scoreboard">
-    <div class="team" data-team="0">
-      <input value="Team 1" aria-label="Team 1 name" />
-      <div class="points" data-points="0">0</div>
-      <div class="team-controls">
-        <button class="btn" data-action="add">+ Add last value</button>
-        <button class="btn" data-action="sub">− Subtract last value</button>
-        <button class="btn secondary" data-action="set">Set score…</button>
-      </div>
-    </div>
+  <div class="topbar">
+    <div class="controls">
+      <label for="teamCount">Teams:</label>
+      <select id="teamCount" aria-label="Number of teams">
+        <option value="1">1</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+      </select>
 
-    <div class="team" data-team="1">
-      <input value="Team 2" aria-label="Team 2 name" />
-      <div class="points" data-points="0">0</div>
-      <div class="team-controls">
-        <button class="btn" data-action="add">+ Add last value</button>
-        <button class="btn" data-action="sub">− Subtract last value</button>
-        <button class="btn secondary" data-action="set">Set score…</button>
-      </div>
+      <button class="btn secondary" id="resetBoard">Reset board</button>
+      <button class="btn secondary" id="resetScores">Reset scores</button>
+      <button class="btn" id="resetAll">Reset all</button>
     </div>
+    <p class="hint">
+      Open a clue, then use any team’s +/− to add/subtract the last opened value.
+    </p>
 
-    <button class="btn secondary" id="resetGame" style="min-width:220px;">Reset board + scores</button>
-  </section>
+    <div class="teams" id="teams"></div>
+  </div>
 
   <div class="wrap">
-    <div class="board" id="board" role="table" aria-label="Jeopardy board">
-      <!-- categories + cells are injected by JS -->
-    </div>
+    <div class="board" id="board" role="table" aria-label="Jeopardy board"></div>
   </div>
 
   <!-- Modal -->
   <div class="modal-backdrop" id="backdrop" role="dialog" aria-modal="true" aria-label="Question modal">
     <div class="modal">
       <div class="modal-header">
-        <div>
-          <p class="modal-title" id="modalTitle">Category for 0</p>
-        </div>
+        <p class="modal-title" id="modalTitle">Category for 0</p>
         <button class="close" id="closeModal">Close</button>
       </div>
 
@@ -287,44 +332,55 @@
 
   <script>
     /*
-      EDIT THIS DATA ONLY.
-      Put your images in: /images/1.png ... /images/15.png
-      Or replace image with a full URL (https://...) or another path.
+      FILES:
+      Put your images in the SAME folder as index.html:
+        1.png ... 16.png
+
+      BOARD:
+      4 categories × 5 rows = 20 clues
+      - 100–400 use images
+      - 500 are text-only (no image)
     */
+
+    const IMG = (n) => `${n}.png`;
+
     const gameData = {
-      categories: ["Category 1", "Category 2", "Category 3"],
-      // 3 columns x 5 rows = 15 clues
-      // index: [row][col]
+      categories: ["Category 1", "Category 2", "Category 3", "Category 4"],
       clues: [
-        // Row 1 = 100
+        // 100
         [
-          { value: 100, prompt: "Look at the image.", image: "images/1.png",  answer: "ANSWER 1" },
-          { value: 100, prompt: "Look at the image.", image: "images/2.png",  answer: "ANSWER 2" },
-          { value: 100, prompt: "Look at the image.", image: "images/3.png",  answer: "ANSWER 3" }
+          { value: 100, prompt: "Look at the image.", image: IMG(1),  answer: "ANSWER" },
+          { value: 100, prompt: "Look at the image.", image: IMG(2),  answer: "ANSWER" },
+          { value: 100, prompt: "Look at the image.", image: IMG(3),  answer: "ANSWER" },
+          { value: 100, prompt: "Look at the image.", image: IMG(4),  answer: "ANSWER" }
         ],
-        // Row 2 = 200
+        // 200
         [
-          { value: 200, prompt: "Look at the image.", image: "images/4.png",  answer: "ANSWER 4" },
-          { value: 200, prompt: "Look at the image.", image: "images/5.png",  answer: "ANSWER 5" },
-          { value: 200, prompt: "Look at the image.", image: "images/6.png",  answer: "ANSWER 6" }
+          { value: 200, prompt: "Look at the image.", image: IMG(5),  answer: "ANSWER" },
+          { value: 200, prompt: "Look at the image.", image: IMG(6),  answer: "ANSWER" },
+          { value: 200, prompt: "Look at the image.", image: IMG(7),  answer: "ANSWER" },
+          { value: 200, prompt: "Look at the image.", image: IMG(8),  answer: "ANSWER" }
         ],
-        // Row 3 = 300
+        // 300
         [
-          { value: 300, prompt: "Look at the image.", image: "images/7.png",  answer: "ANSWER 7" },
-          { value: 300, prompt: "Look at the image.", image: "images/8.png",  answer: "ANSWER 8" },
-          { value: 300, prompt: "Look at the image.", image: "images/9.png",  answer: "ANSWER 9" }
+          { value: 300, prompt: "Look at the image.", image: IMG(9),  answer: "ANSWER" },
+          { value: 300, prompt: "Look at the image.", image: IMG(10), answer: "ANSWER" },
+          { value: 300, prompt: "Look at the image.", image: IMG(11), answer: "ANSWER" },
+          { value: 300, prompt: "Look at the image.", image: IMG(12), answer: "ANSWER" }
         ],
-        // Row 4 = 400
+        // 400 (includes your new 16.png as the 16th image)
         [
-          { value: 400, prompt: "Look at the image.", image: "images/10.png", answer: "ANSWER 10" },
-          { value: 400, prompt: "Look at the image.", image: "images/11.png", answer: "ANSWER 11" },
-          { value: 400, prompt: "Look at the image.", image: "images/12.png", answer: "ANSWER 12" }
+          { value: 400, prompt: "Look at the image.", image: IMG(13), answer: "ANSWER" },
+          { value: 400, prompt: "Look at the image.", image: IMG(14), answer: "ANSWER" },
+          { value: 400, prompt: "Look at the image.", image: IMG(15), answer: "ANSWER" },
+          { value: 400, prompt: "Look at the image.", image: IMG(16), answer: "ANSWER" }
         ],
-        // Row 5 = 500
+        // 500 (TEXT-ONLY: no image)
         [
-          { value: 500, prompt: "Look at the image.", image: "images/13.png", answer: "ANSWER 13" },
-          { value: 500, prompt: "Look at the image.", image: "images/14.png", answer: "ANSWER 14" },
-          { value: 500, prompt: "Look at the image.", image: "images/15.png", answer: "ANSWER 15" }
+          { value: 500, prompt: "TEXT QUESTION (no image)", image: "", answer: "ANSWER" },
+          { value: 500, prompt: "TEXT QUESTION (no image)", image: "", answer: "ANSWER" },
+          { value: 500, prompt: "TEXT QUESTION (no image)", image: "", answer: "ANSWER" },
+          { value: 500, prompt: "TEXT QUESTION (no image)", image: "", answer: "ANSWER" }
         ]
       ]
     };
@@ -337,6 +393,9 @@
     };
 
     const boardEl = document.getElementById("board");
+    const teamsEl = document.getElementById("teams");
+    const teamCountEl = document.getElementById("teamCount");
+
     const backdropEl = document.getElementById("backdrop");
     const modalTitleEl = document.getElementById("modalTitle");
     const modalPromptEl = document.getElementById("modalPrompt");
@@ -346,7 +405,7 @@
     function buildBoard() {
       boardEl.innerHTML = "";
 
-      // categories row (3)
+      // categories row
       for (let c = 0; c < gameData.categories.length; c++) {
         const cat = document.createElement("div");
         cat.className = "category";
@@ -354,18 +413,16 @@
         boardEl.appendChild(cat);
       }
 
-      // 5 rows x 3 cols cells
+      // 5 rows × 4 cols
       for (let r = 0; r < gameData.clues.length; r++) {
         for (let c = 0; c < gameData.clues[r].length; c++) {
           const clue = gameData.clues[r][c];
 
           const cell = document.createElement("div");
           cell.className = "cell";
-          cell.setAttribute("role", "cell");
           cell.tabIndex = 0;
           cell.dataset.row = String(r);
           cell.dataset.col = String(c);
-          cell.dataset.used = "0";
           cell.textContent = clue.value;
 
           cell.addEventListener("click", () => openClue(cell, r, c));
@@ -391,7 +448,17 @@
 
       modalTitleEl.textContent = `${gameData.categories[c]} for ${clue.value}`;
       modalPromptEl.textContent = clue.prompt || "";
-      modalImgEl.src = clue.image || "";
+
+      // Show image only if present
+      const hasImage = (clue.image || "").trim().length > 0;
+      if (hasImage) {
+        modalImgEl.src = clue.image;
+        modalImgEl.style.display = "block";
+      } else {
+        modalImgEl.removeAttribute("src");
+        modalImgEl.style.display = "none";
+      }
+
       modalAnswerEl.textContent = clue.answer || "";
       modalAnswerEl.style.display = "none";
 
@@ -406,7 +473,6 @@
     function markUsed() {
       if (!state.activeCellEl) return;
       state.activeCellEl.classList.add("used");
-      state.activeCellEl.dataset.used = "1";
     }
 
     // Modal controls
@@ -426,67 +492,98 @@
       closeModal();
     });
 
-    // Click outside modal closes
     backdropEl.addEventListener("click", () => closeModal());
     document.querySelector(".modal").addEventListener("click", (e) => e.stopPropagation());
 
-    // ESC closes modal
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && backdropEl.style.display === "block") closeModal();
     });
 
-    // Scoreboard controls
-    function getTeamPointsEl(teamEl){ return teamEl.querySelector(".points"); }
+    // Teams
+    function renderTeams(count) {
+      teamsEl.innerHTML = "";
+      for (let i = 0; i < count; i++) {
+        const team = document.createElement("div");
+        team.className = "team";
+        team.dataset.team = String(i);
 
-    function setPoints(teamEl, value){
-      const pEl = getTeamPointsEl(teamEl);
+        team.innerHTML = `
+          <input value="Team ${i+1}" aria-label="Team ${i+1} name" />
+          <div class="points" data-points="0">0</div>
+          <div class="team-controls">
+            <button class="mini" data-action="add">+ ${i+1}</button>
+            <button class="mini" data-action="sub">− ${i+1}</button>
+            <button class="mini secondary" data-action="set">Set</button>
+          </div>
+        `;
+
+        team.querySelectorAll("button").forEach(btn => {
+          btn.addEventListener("click", () => handleTeamAction(team, btn.dataset.action));
+        });
+
+        teamsEl.appendChild(team);
+      }
+    }
+
+    function getPoints(teamEl) {
+      const pEl = teamEl.querySelector(".points");
+      return parseInt(pEl.dataset.points || "0", 10) || 0;
+    }
+
+    function setPoints(teamEl, value) {
+      const pEl = teamEl.querySelector(".points");
       pEl.dataset.points = String(value);
       pEl.textContent = String(value);
     }
 
-    function getPoints(teamEl){
-      const pEl = getTeamPointsEl(teamEl);
-      const n = parseInt(pEl.dataset.points || "0", 10);
-      return Number.isFinite(n) ? n : 0;
+    function handleTeamAction(teamEl, action) {
+      const current = getPoints(teamEl);
+
+      if (action === "add") {
+        setPoints(teamEl, current + state.lastValue);
+        markUsed(); // optional: mark used when scoring
+      } else if (action === "sub") {
+        setPoints(teamEl, current - state.lastValue);
+        markUsed(); // optional
+      } else if (action === "set") {
+        const input = prompt("Enter new score (number):", String(current));
+        const n = parseInt(input ?? "", 10);
+        if (Number.isFinite(n)) setPoints(teamEl, n);
+      }
     }
 
-    document.querySelectorAll(".team").forEach(teamEl => {
-      teamEl.querySelectorAll("button").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const action = btn.dataset.action;
-          const current = getPoints(teamEl);
-
-          if (action === "add") {
-            setPoints(teamEl, current + state.lastValue);
-            markUsed(); // optional: mark used when awarding points
-          } else if (action === "sub") {
-            setPoints(teamEl, current - state.lastValue);
-            markUsed(); // optional
-          } else if (action === "set") {
-            const input = prompt("Enter new score (number):", String(current));
-            const n = parseInt(input ?? "", 10);
-            if (Number.isFinite(n)) setPoints(teamEl, n);
-          }
-        });
-      });
+    teamCountEl.addEventListener("change", () => {
+      renderTeams(parseInt(teamCountEl.value, 10));
     });
 
-    // Reset
-    document.getElementById("resetGame").addEventListener("click", () => {
-      if (!confirm("Reset board and scores?")) return;
-
-      document.querySelectorAll(".cell").forEach(cell => {
-        cell.classList.remove("used");
-        cell.dataset.used = "0";
-      });
-
-      document.querySelectorAll(".team").forEach(teamEl => setPoints(teamEl, 0));
-      state.lastValue = 0;
+    // Reset buttons
+    function resetBoardOnly() {
+      document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("used"));
       closeModal();
+    }
+
+    function resetScoresOnly() {
+      document.querySelectorAll(".team").forEach(teamEl => setPoints(teamEl, 0));
+    }
+
+    document.getElementById("resetBoard").addEventListener("click", () => {
+      if (confirm("Reset the board (keep scores)?")) resetBoardOnly();
+    });
+
+    document.getElementById("resetScores").addEventListener("click", () => {
+      if (confirm("Reset scores (keep board)?")) resetScoresOnly();
+    });
+
+    document.getElementById("resetAll").addEventListener("click", () => {
+      if (!confirm("Reset board and scores?")) return;
+      resetBoardOnly();
+      resetScoresOnly();
+      state.lastValue = 0;
     });
 
     // Init
     buildBoard();
+    renderTeams(parseInt(teamCountEl.value, 10));
   </script>
 </body>
 </html>
