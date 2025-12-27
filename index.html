@@ -298,8 +298,7 @@
       <button class="btn secondary" id="resetScores">Reset scores</button>
       <button class="btn" id="resetAll">Reset all</button>
     </div>
-    <p class="hint">
-    </p>
+    <p class="hint"></p>
 
     <div class="teams" id="teams"></div>
   </div>
@@ -331,17 +330,13 @@
 
   <script>
     /*
-      FILES:
-      Put your images in the SAME folder as index.html:
-        1.png ... 16.png
-
-      BOARD:
-      4 categories × 5 rows = 20 clues
-      - 100–400 use images
-      - 500 are text-only (no image)
+      Persistence:
+      - Used cells
+      - Team count, names, scores
+      - lastValue (last opened clue value)
     */
 
-    const IMG = (n) => `${n}.png`;
+    const STORAGE_KEY = "jeopardy_v1";
 
     const gameData = {
       categories: ["Adverbs of frequency", "Apostrophe 's", "Some/any/a", "Gerund"],
@@ -351,7 +346,7 @@
           { value: 100, prompt: "My neighbor goes swimming in his pool ........ (50%)", image: "",  answer: "sometimes/occasionally" },
           { value: 100, prompt: "The kid of Joe is an energetic boy.", image: "",  answer: "Joe's kid is an energetic boy." },
           { value: 100, prompt: "I don't have .... free time.", image: "",  answer: "any" },
-          { value: 100, prompt: "Do you want to go ..... with me tomorrow morning?  (jogging / to jog)", image: "",  answer: " jogging" }
+          { value: 100, prompt: "Do you want to go ..... with me tomorrow morning?  (jogging / to jog)", image: "",  answer: "jogging" }
         ],
         // 200
         [
@@ -362,24 +357,24 @@
         ],
         // 300
         [
-          { value: 300, prompt: " Daniela ....... (10%) texts me. ", image: "",  answer: "rarely/hardly ever" },
+          { value: 300, prompt: "Daniela ....... (10%) texts me.", image: "",  answer: "rarely/hardly ever" },
           { value: 300, prompt: "The colors of the college are green and yellow.", image: "", answer: "The college's colors are green and yellow." },
           { value: 300, prompt: "Do you want .... bowl of soup for dinner?", image: "", answer: "a" },
           { value: 300, prompt: "Elizabeth finds it difficult.....money.  (saving / to save)", image: "", answer: "to save" }
         ],
-        // 400 (includes your new 16.png as the 16th image)
+        // 400
         [
           { value: 400, prompt: "Melissa ..... (80%) practices the piano after school.", image: "", answer: "usually/often/frequently" },
           { value: 400, prompt: "Listen to the story of the family.", image: "", answer: "Listen to the family's story." },
           { value: 400, prompt: "Are there .... flowers in the garden?", image: "", answer: "any" },
-          { value: 400, prompt: "Using a phone card is better for ..... long-distance calls.  (making / to make ", image: "", answer: "making" }
+          { value: 400, prompt: "Using a phone card is better for ..... long-distance calls.  (making / to make)", image: "", answer: "making" }
         ],
         // 500 (TEXT-ONLY: no image)
         [
           { value: 500, prompt: "She is .... (5%) sad", image: "", answer: "almost never" },
           { value: 500, prompt: "I want to go to the sale of the store.", image: "", answer: "I want to go to the store's sale." },
-          { value: 500, prompt: " Would you like.... ice cream?", image: "", answer: "some" },
-          { value: 500, prompt: " Chris is considering..... English for another year.  (studying / to study)", image: "", answer: "studying" }
+          { value: 500, prompt: "Would you like.... ice cream?", image: "", answer: "some" },
+          { value: 500, prompt: "Chris is considering..... English for another year. (studying / to study)", image: "", answer: "studying" }
         ]
       ]
     };
@@ -401,6 +396,90 @@
     const modalImgEl = document.getElementById("modalImg");
     const modalAnswerEl = document.getElementById("modalAnswer");
 
+    // ---------- Persistence ----------
+    function saveGame() {
+      const used = [...document.querySelectorAll(".cell.used")].map(cell => ({
+        r: Number(cell.dataset.row),
+        c: Number(cell.dataset.col)
+      }));
+
+      const teams = [...document.querySelectorAll(".team")].map(teamEl => ({
+        name: teamEl.querySelector("input")?.value ?? "",
+        points: Number(teamEl.querySelector(".points")?.dataset.points ?? 0)
+      }));
+
+      const payload = {
+        teamCount: Number(teamCountEl.value),
+        lastValue: Number(state.lastValue ?? 0),
+        used,
+        teams
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+      } catch {
+        // If storage is blocked/full, the game will still work; it just won't persist.
+      }
+    }
+
+    function loadGame() {
+      let raw = null;
+      try {
+        raw = localStorage.getItem(STORAGE_KEY);
+      } catch {
+        raw = null;
+      }
+      if (!raw) return;
+
+      let data = null;
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        return;
+      }
+
+      // Restore team count first (this rebuilds teams)
+      const count = Number(data.teamCount);
+      if (Number.isFinite(count) && count >= 1 && count <= 10) {
+        teamCountEl.value = String(count);
+      }
+
+      // Build UI from scratch
+      buildBoard();
+      renderTeams(parseInt(teamCountEl.value, 10));
+
+      // Restore team names + scores
+      if (Array.isArray(data.teams)) {
+        const teamEls = [...document.querySelectorAll(".team")];
+        data.teams.forEach((t, i) => {
+          const el = teamEls[i];
+          if (!el) return;
+          const input = el.querySelector("input");
+          if (input && typeof t.name === "string") input.value = t.name;
+          setPoints(el, Number(t.points ?? 0));
+        });
+      }
+
+      // Restore used cells
+      if (Array.isArray(data.used)) {
+        data.used.forEach(({ r, c }) => {
+          const cell = document.querySelector(`.cell[data-row="${r}"][data-col="${c}"]`);
+          if (cell) cell.classList.add("used");
+        });
+      }
+
+      state.lastValue = Number(data.lastValue ?? 0);
+    }
+
+    function clearSavedGame() {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+    }
+
+    // ---------- Board ----------
     function buildBoard() {
       boardEl.innerHTML = "";
 
@@ -462,6 +541,7 @@
       modalAnswerEl.style.display = "none";
 
       backdropEl.style.display = "block";
+      saveGame(); // persist lastValue
     }
 
     function closeModal() {
@@ -472,6 +552,7 @@
     function markUsed() {
       if (!state.activeCellEl) return;
       state.activeCellEl.classList.add("used");
+      saveGame();
     }
 
     // Modal controls
@@ -498,7 +579,7 @@
       if (e.key === "Escape" && backdropEl.style.display === "block") closeModal();
     });
 
-    // Teams
+    // ---------- Teams ----------
     function renderTeams(count) {
       teamsEl.innerHTML = "";
       for (let i = 0; i < count; i++) {
@@ -516,6 +597,9 @@
           </div>
         `;
 
+        // Save team name changes
+        team.querySelector("input")?.addEventListener("input", saveGame);
+
         team.querySelectorAll("button").forEach(btn => {
           btn.addEventListener("click", () => handleTeamAction(team, btn.dataset.action));
         });
@@ -530,9 +614,12 @@
     }
 
     function setPoints(teamEl, value) {
+      const n = Number(value);
+      const safe = Number.isFinite(n) ? n : 0;
       const pEl = teamEl.querySelector(".points");
-      pEl.dataset.points = String(value);
-      pEl.textContent = String(value);
+      pEl.dataset.points = String(safe);
+      pEl.textContent = String(safe);
+      saveGame();
     }
 
     function handleTeamAction(teamEl, action) {
@@ -553,16 +640,24 @@
 
     teamCountEl.addEventListener("change", () => {
       renderTeams(parseInt(teamCountEl.value, 10));
+      saveGame();
     });
 
-    // Reset buttons
+    // ---------- Reset buttons ----------
     function resetBoardOnly() {
       document.querySelectorAll(".cell").forEach(cell => cell.classList.remove("used"));
       closeModal();
+      saveGame();
     }
 
     function resetScoresOnly() {
-      document.querySelectorAll(".team").forEach(teamEl => setPoints(teamEl, 0));
+      document.querySelectorAll(".team").forEach(teamEl => {
+        // Directly set without double-saving per team (we save once at end)
+        const pEl = teamEl.querySelector(".points");
+        pEl.dataset.points = "0";
+        pEl.textContent = "0";
+      });
+      saveGame();
     }
 
     document.getElementById("resetBoard").addEventListener("click", () => {
@@ -578,11 +673,15 @@
       resetBoardOnly();
       resetScoresOnly();
       state.lastValue = 0;
+      clearSavedGame(); // full reset should clear saved data
     });
 
-    // Init
+    // ---------- Init ----------
+    // Default build (in case there is no saved data)
     buildBoard();
     renderTeams(parseInt(teamCountEl.value, 10));
+    // Then load saved state (this rebuilds board/teams again if saved data exists)
+    loadGame();
   </script>
 </body>
 </html>
