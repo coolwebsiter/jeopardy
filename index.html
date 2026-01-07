@@ -275,7 +275,7 @@
 
 <body>
   <header>
-    <h1>revision</h1>
+    <h1> superlative & comparative</h1>
   </header>
 
   <div class="topbar">
@@ -339,42 +339,42 @@
     const STORAGE_KEY = "jeopardy_v1";
 
     const gameData = {
-      categories: ["Adverbs of frequency", "Apostrophe 's", "Some/any/a", "Gerund"],
+      categories: ["comparative", "superlative", "superlative or comparative?", "superlative or comparative?"],
       clues: [
         // 100
         [
-          { value: 100, prompt: "My neighbor goes swimming in his pool ........ (50%)", image: "",  answer: "sometimes/occasionally" },
-          { value: 100, prompt: "The kid of Joe is an energetic boy.", image: "",  answer: "Joe's kid is an energetic boy." },
-          { value: 100, prompt: "I don't have .... free time.", image: "",  answer: "any" },
-          { value: 100, prompt: "Do you want to go ..... with me tomorrow morning?  (jogging / to jog)", image: "",  answer: "jogging" }
+          { value: 100, prompt: "This coffee is very weak.  I like it .....", image: "",  answer: "stronger" },
+          { value: 100, prompt: "This building is 250 metres high, but it’s not ... in the city.", image: "",  answer: "the tallest" },
+          { value: 100, prompt: "I wasn’t feeling well yesterday, but I feel a bit .... today.  (good)  ", image: "",  answer: "better" },
+          { value: 100, prompt: "What’s .... thing you’ve ever bought?   (expensive) ", image: "",  answer: "the most expensive" }
         ],
         // 200
         [
-          { value: 200, prompt: "Chris is ..... (0%) bored.", image: "",  answer: "never" },
-          { value: 200, prompt: "I need to wash the clothes of my son.", image: "",  answer: "I need to wash my son's clothes." },
-          { value: 200, prompt: "There is already .... furniture in the apartment.", image: "",  answer: "some" },
-          { value: 200, prompt: "It is essential .... salt to this recipe.   (adding / to add)", image: "",  answer: "to add" }
+          { value: 200, prompt: "Health and happiness are  ......  money.", image: "",  answer: "more important than" },
+          { value: 200, prompt: "Sarah always tells the truth. She’s one of .... people I know. ", image: "",  answer: "the most honest" },
+          { value: 200, prompt: "Who is the ... person you know? (old)", image: "",  answer: "oldest" },
+          { value: 200, prompt: " Which is .... – the bus or the train? (quick)", image: "",  answer: "quicker" }
         ],
         // 300
         [
-          { value: 300, prompt: "Daniela ....... (10%) texts me.", image: "",  answer: "rarely/hardly ever" },
-          { value: 300, prompt: "The colors of the college are green and yellow.", image: "", answer: "The college's colors are green and yellow." },
-          { value: 300, prompt: "Do you want .... bowl of soup for dinner?", image: "", answer: "a" },
-          { value: 300, prompt: "Elizabeth finds it difficult.....money.  (saving / to save)", image: "", answer: "to save" }
+          { value: 300, prompt: "You hardly ever call me.  Why don’t you call me .... ?", image: "",  answer: "more often" },
+          { value: 300, prompt: "It was an awful day. It was .... day of my life.", image: "", answer: "the worst" },
+          { value: 300, prompt: "What’s ... way to get to the station? (quick)", image: "", answer: "the quickest" },
+          { value: 300, prompt: "Amy and Ben have three daughters. ...  is 14 years old.  (old)", image: "", answer: "The eldest  or  The oldest" }
         ],
         // 400
         [
-          { value: 400, prompt: "Melissa ..... (80%) practices the piano after school.", image: "", answer: "usually/often/frequently" },
-          { value: 400, prompt: "Listen to the story of the family.", image: "", answer: "Listen to the family's story." },
-          { value: 400, prompt: "Are there .... flowers in the garden?", image: "", answer: "any" },
-          { value: 400, prompt: "Using a phone card is better for ..... long-distance calls.  (making / to make)", image: "", answer: "making" }
+          { value: 400, prompt: "You’re talking very loudly.  Can you speak more  .... ?", image: "", answer: "quietly" },
+          { value: 400, prompt: "I like the morning.  For me it’s ..... part of the day. ", image: "", answer: " the best" },
+          { value: 400, prompt: "I can remember when I was three years old.  It’s .... memory.  (early)", image: "", answer: "my earliest" },
+          { value: 400, prompt: " I’m sorry I don’t understand.  Can you speak ... , please?", image: "", answer: "slowly" }
         ],
         // 500 (TEXT-ONLY: no image)
         [
-          { value: 500, prompt: "She is .... (5%) sad", image: "", answer: "almost never" },
-          { value: 500, prompt: "I want to go to the sale of the store.", image: "", answer: "I want to go to the store's sale." },
-          { value: 500, prompt: "Would you like.... ice cream?", image: "", answer: "some" },
-          { value: 500, prompt: "Chris is considering..... English for another year. (studying / to study)", image: "", answer: "studying" }
+          { value: 500, prompt: "The journey takes four hours by car and five hours by train. The journey takes ... train ... car.", image: "", answer: "The journey takes longer by train than by car." },
+          { value: 500, prompt: "Spring is a very busy time for me.  It’s .... the year", image: "", answer: "It’s the busiest time of the year." },
+          { value: 500, prompt: "A: This knife isn’t very sharp.  Do you have a  one?  B: No, it’s  one I have. (sharp)", image: "", answer: "Do you have a sharper one? No, it’s the sharpest one I have. " },
+          { value: 500, prompt: "Everest is ... mountain in the world.  It is ... than any other mountain.  (high)", image: "", answer: " … the highest mountain in the world … It is higher than … " }
         ]
       ]
     };
