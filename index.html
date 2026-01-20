@@ -344,42 +344,42 @@
     const IMG = (n) => `${n}.png`;
 
     const gameData = {
-      categories: ["Category 1", "Category 2", "Category 3", "Category 4"],
+      categories: ["must / can't", "mustn't / don't have to", "should/shouldn’t", "modal verb + questions"],
       clues: [
         // 100
         [
-          { value: 100, prompt: "Look at the image. Where is the ghost?", image: IMG(1),  answer: "BEHIND THE COUCH" },
-          { value: 100, prompt: "Look at the image. Where is the ghost?", image: IMG(2),  answer: "IN THE CLOSET" },
-          { value: 100, prompt: "Look at the image. Where is the ghost?", image: IMG(3),  answer: "UNDER/BELOW THE BED" },
-          { value: 100, prompt: "Look at the image. Where is the ghost?", image: IMG(4),  answer: "OVER/ABOVE THE WINDOW " }
+          { value: 100, prompt: "That restaurant ...... be very good.  It’s always full of people.", image: IMG(1),  answer: "must" },
+          { value: 100, prompt: "It's an exam! You ..... talk!", image: IMG(2),  answer: "mustn't" },
+          { value: 100, prompt: "You ________ a scarf. It's really cold today. ", image: IMG(3),  answer: "You should wear a scarf" },
+          { value: 100, prompt: "....... you speak any foreign languages?", image: IMG(4),  answer: "Can you speak any foreign languages?W " }
         ],
         // 200
         [
-          { value: 200, prompt: "Look at the image. Where is the ghost?", image: IMG(5),  answer: "IN FRONT OF THE TABLE" },
-          { value: 200, prompt: "Look at the image. Where is the ghost?", image: IMG(6),  answer: "NEXT TO THE CHAIR" },
-          { value: 200, prompt: "Look at the image. Where is the ghost?", image: IMG(7),  answer: "BETWEEN WINDOWS" },
-          { value: 200, prompt: "Look at the image. Where is the ghost?", image: IMG(8),  answer: "OPPOSITE TO ME" }
+          { value: 200, prompt: "This bill ...... be correct.  It’s much too high.", image: IMG(5),  answer: "can't" },
+          { value: 200, prompt: "You ..... speak too loud. The baby is sleeping.", image: IMG(6),  answer: "mustn't" },
+          { value: 200, prompt: " You look really ill. You _________ at work.", image: IMG(7),  answer: "You shouldn’t be at work" },
+          { value: 200, prompt: " Do you think I ...... apply for this job?", image: IMG(8),  answer: " Do you think I should apply for this job?" }
         ],
         // 300
         [
-          { value: 300, prompt: "Look at the image. Where is the ghost?", image: IMG(9),  answer: "ON THE CHAIR" },
-          { value: 300, prompt: "Look at the image. Where is the ghost going?", image: IMG(10), answer: "INTO THE CLOSET (ішіне/в шкаф)" },
-          { value: 300, prompt: "Look at the image. Where is the ghost going?", image: IMG(11), answer: "FROM THE BEDROOM TO THE BATHROOM" },
-          { value: 300, prompt: "Look at the image. Where is the ghost going?", image: IMG(12), answer: "UP THE STAIRS" }
+          { value: 300, prompt: "Karen hasn’t left the office yet.  She ...... be working late tonight.", image: IMG(9),  answer: "must" },
+          { value: 300, prompt: "You ....... do the exercises now. You can do them for homework.", image: IMG(10), answer: "don't have to" },
+          { value: 300, prompt: "She _______ more. She's very stressed at the moment. ", image: IMG(11), answer: "She should relax more." },
+          { value: 300, prompt: "...... you leave so soon?", image: IMG(12), answer: "Must you leave so soon? -> Do you have to leave so soon?" }
         ],
         // 400 (includes your new 16.png as the 16th image)
         [
-          { value: 400, prompt: "Look at the image. Where is the ghost going?", image: IMG(13), answer: "DOWN THE STAIRS" },
-          { value: 400, prompt: "Look at the image. Where is the ghost going?", image: IMG(14), answer: "OUT OF THE CLOSET (тыс/из шкафа" },
-          { value: 400, prompt: "Look at the image. Where is the ghost going?", image: IMG(15), answer: "THROUGH THE WINDOW (арқылы/через)" },
-          { value: 400, prompt: "Look at the image. Describe the movement of the arrow", image: IMG(16), answer: "AROUND THE GLOBE (айналасында/вокруг)" }
+          { value: 400, prompt: "Bill and Sue always stay at five-star hotels.  They ....... be short of money.", image: IMG(13), answer: "can't" },
+          { value: 400, prompt: "Sophie likes weekends because she ...... get up early.", image: IMG(14), answer: "doesn't have to" },
+          { value: 400, prompt: "You _____ so fast -this road's very dangerous.", image: IMG(15), answer: "You shouldn’t drive so fast" },
+          { value: 400, prompt: " When ..... Helen ...... go?", image: IMG(16), answer: " When does Helen have to go?" }
         ],
         // 500 (TEXT-ONLY: no image)
         [
-          { value: 500, prompt: "I met them ... the airport.", image: "", answer: "I met them at the airport." },
-          { value: 500, prompt: "I don’t spend much money ... food.", image: "", answer: "I don’t spend much money on food." },
-          { value: 500, prompt: " He’s at work ... the moment.", image: "", answer: " He’s at work at the moment." },
-          { value: 500, prompt: "Who does this bag belong ...?", image: "", answer: "Who does this bag belong to?" }
+          { value: 500, prompt: "You got here very quickly.  You ...... have driven very fast.", image: "", answer: "must" },
+          { value: 500, prompt: "We have plenty of time before our flight.  We ....... check in yet.", image: "", answer: "don't have to" },
+          { value: 500, prompt: "You _______ him an iPad -he's only seven years old", image: "", answer: "You shouldn’t buy him an iPad" },
+          { value: 500, prompt: "What ...... do to get a new driving licence? (I)", image: "", answer: "What do I have to do to get a new driving licence?" }
         ]
       ]
     };
