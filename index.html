@@ -344,40 +344,40 @@
     const IMG = (n) => `${n}.png`;
 
     const gameData = {
-      categories: ["TENSE", "MODALS", "ADJECTIVES", "RANDOM"],
+      categories: ["TENSE", "MODALS", "RANDOM 1", "RANDOM 2"],
       clues: [
         // 100
         [
           { value: 100, prompt: "‘What ........ (your father / do)?’ ‘He’s an architect.", image: IMG(1),  answer: "does your father do" },
-          { value: 100, prompt: "It's an exam! You ..... talk!", image: IMG(2),  answer: "mustn't" },
-          { value: 100, prompt: "You ________ a scarf. It's really cold today. ", image: IMG(3),  answer: "You should wear a scarf" },
-          { value: 100, prompt: "....... you speak any foreign languages?", image: IMG(4),  answer: "Can you speak any foreign languages?W " }
+          { value: 100, prompt: "It rained every day during their holiday.  It ...... have been very nice for them (must/can't)", image: IMG(2),  answer: "can't" },
+          { value: 100, prompt: "Why do you keep ...... me questions?  Leave me alone! (ask)", image: IMG(3),  answer: "asking" },
+          { value: 100, prompt: "Sarah doesn’t know about the meeting.  I forgot ...... her. (tell)", image: IMG(4),  answer: "to tell " }
         ],
         // 200
         [
           { value: 200, prompt: "Are you ready yet? ............  (Everybody / wait) for you", image: IMG(5),  answer: "Everybody is waiting" },
-          { value: 200, prompt: "You ..... speak too loud. The baby is sleeping.", image: IMG(6),  answer: "mustn't" },
-          { value: 200, prompt: " You look really ill. You _________ at work.", image: IMG(7),  answer: "You shouldn’t be at work" },
-          { value: 200, prompt: " Do you think I ...... apply for this job?", image: IMG(8),  answer: " Do you think I should apply for this job?" }
+          { value: 200, prompt: "There’s a lift in the building, so we ....... climb the stairs.", image: IMG(6),  answer: "don’t have to" },
+          { value: 200, prompt: " I work on 'the ground floor of the building.' ('s?) ", image: IMG(7),  answer: "no" },
+          { value: 200, prompt: " 'The garden of our neighbours' is very small. ('s?)", image: IMG(8),  answer: "Our neighbours’ garden" }
         ],
         // 300
         [
           { value: 300, prompt: "a: I forgot my wallet. I don’t have any money.  b: Not to worry. .....  you some. (I / lend)", image: IMG(9),  answer: "I’ll lend" },
-          { value: 300, prompt: "You ....... do the exercises now. You can do them for homework.", image: IMG(10), answer: "don't have to" },
+          { value: 300, prompt: "‘Joe is a hard worker.’ ‘Joe?  You ...... be joking.  He doesn’t do anything.’", image: IMG(10), answer: "must" },
           { value: 300, prompt: "She _______ more. She's very stressed at the moment. ", image: IMG(11), answer: "She should relax more." },
           { value: 300, prompt: "...... you leave so soon?", image: IMG(12), answer: "Must you leave so soon? -> Do you have to leave so soon?" }
         ],
         // 400 (includes your new 16.png as the 16th image)
         [
           { value: 400, prompt: "This watch wasn’t expensive.  It ........ much. (cost)", image: IMG(13), answer: "didn’t cost" },
-          { value: 400, prompt: "Sophie likes weekends because she ...... get up early.", image: IMG(14), answer: "doesn't have to" },
+          { value: 400, prompt: "There are plenty of hotels in the town.  It ....... be hard to find a place to stay", image: IMG(14), answer: "shouldn't" },
           { value: 400, prompt: "You _____ so fast -this road's very dangerous.", image: IMG(15), answer: "You shouldn’t drive so fast" },
           { value: 400, prompt: " When ..... Helen ...... go?", image: IMG(16), answer: " When does Helen have to go?" }
         ],
         // 500 (TEXT-ONLY: no image)
         [
           { value: 500, prompt: "‘Do you know where Julia is?’ ‘Yes, ........ (I / just / see / her).’", image: "", answer: "must" },
-          { value: 500, prompt: "We have plenty of time before our flight.  We ....... check in yet.", image: "", answer: "don't have to" },
+          { value: 500, prompt: "a: Where are you going to put that picture? b: I don’t know yet.  I might hang / I’m going to hang - it in the bedroom.", image: "", answer: "I might hang " },
           { value: 500, prompt: "You _______ him an iPad -he's only seven years old", image: "", answer: "You shouldn’t buy him an iPad" },
           { value: 500, prompt: "What ...... do to get a new driving licence? (I)", image: "", answer: "What do I have to do to get a new driving licence?" }
         ]
